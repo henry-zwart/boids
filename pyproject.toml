@@ -10,6 +10,7 @@ requires-python = ">=3.13"
 dependencies = [
     "matplotlib>=3.10.0",
     "numpy>=2.2.1",
+    "scipy>=1.15.1",
 ]
 
 [project.scripts]
@@ -18,3 +19,7 @@ boids = "boids:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
