@@ -31,7 +31,7 @@ class InteractiveAnimation:
         )
         plt.show()
 
-    def update_plot(self, frame: int):
+    def update_plot(self, _: int):
         self.flock.update(self.step_size)
         self.boids.set_data(self.flock.position[:, 0], self.flock.position[:, 1])
         self.preds.set_data(
@@ -257,13 +257,13 @@ class InteractiveAnimation:
     def set_avoid_radius(self, value):
         self.flock.avoid_radius = value
 
-    def add_predator(self, value):
+    def add_predator(self, _):
         self.flock.add_predator()
 
-    def remove_predator(self, value):
+    def remove_predator(self, _):
         self.flock.remove_oldest_predator()
 
-    def show_or_hide_axes(self, value):
+    def show_or_hide_axes(self, _):
         if self.show_axes:
             self.show_axes = False
             self.ax_plot.set_axis_off()
@@ -271,7 +271,7 @@ class InteractiveAnimation:
             self.show_axes = True
             self.ax_plot.set_axis_on()
 
-    def toggle_camera_orbit(self, value):
+    def toggle_camera_orbit(self, _):
         if self.camera_orbit_enabled:
             self.camera_orbit_enabled = False
         else:
