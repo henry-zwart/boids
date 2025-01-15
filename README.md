@@ -30,7 +30,7 @@ $$v_b(t + \Delta t) = v_b(t) + a_b(t)\cdot \Delta t$$
 
 and 
 
-$$x_b(t + \Delta t) = x_b(t) + v_b(t + \Delta t) \Delta t$$
+$$x_b(t + \Delta t) = x_b(t) + v_b(t + \Delta t) \cdot \Delta t$$
 
 
 ### Predators
