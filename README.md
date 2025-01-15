@@ -5,74 +5,54 @@ An interactive 3D simulation of Craig Reynolds' 'Boids' model, written in Python
 
 https://github.com/user-attachments/assets/74c8d25f-7a36-4b6e-9615-411b9d3c26d0
 
+## Running the application
 
+The application is driven by a minimal command line interface with the following usage:
 
-## Quickstart - Reproducing Results
+> `boids [-h] [--framerate FRAMERATE] n_boids`
 
-Ensure that you have a working version of `make` installed:
+Where `--framerate` is an optional parameter which is otherwise defaulted based on `n_boids`.
+If you experience slow or "jumpy" behaviour in the animation, particularly for large 
+numbers of boids, you may try lowering the framerate.
+
+Typical values for `n_boids` are between 500 and 1500. Above this limit the application 
+reaches performance limits. Simulations above 1500 boids are possible, but must generally
+trade off between lower framerate, or non-realtime simulation.
+
+The simplest way to run the application is via [uv](https://github.com/astral-sh/uv):
 
 ```zsh
-# Should print 'GNU Make X.XX, etc.'
-make --version
+# == Navigate to this directory
+cd /path/to/boids
+
+# == Run the model, passing the number of boids as a parameter
+uv run boids 512
 ```
 
-The [recommended approach](#with-uv-recommended) to running the experiments requires an installation of the [uv](https://github.com/astral-sh/uv) Python package manager.
+Alternatively, you can also run the application within a virtual environment. This method 
+requires a pre-existing installation of Python3.13, for instance, obtained via conda or pyenv. 
 
-If this is not installed, follow the [alternative instructions](#without-uv) for running experiments.
-
-### With uv (recommended)
-
-Ensure [uv](https://github.com/astral-sh/uv) is installed locally.
-
-uv handles package and Python versioning, ensuring a consistent experiment environment across machines and operating systems.
-
-To reproduce the results execute the following steps:
+> **Note:** If your Python3.13 executable is called something other than `python3.13`, replace this accordingly in the following steps.
 
 ```zsh
-cd path/to/repository
-
-# If you have limited computational resources
-make
-
-# If you have at least ~32GB memory and several CPU cores
-make -j 4
-```
-
-After this completes, the experimental results (metadata + figures) are located in `./results`, and intermediary data in `./data`.
-
-### Without uv
-
-Note that only the [uv approach to running experiments](#with-uv-recommended) has been thoroughly tested, and is therefore recommended over this method. 
-
-The experiments rely on Python3.12, and the packages outlined in [requirements.txt](requirements.txt).
-
-> **Note:** If your Python3.12 executable is called something other than `python3.12`, replace this accordingly in the following steps.
-
-To reproduce the results, execute the following steps:
-
-```zsh
-cd path/to/repository
+# == Navigate to this directory
+cd path/to/boids
 
 # == Create a virtual environment
-python3.12 -m venv env
+python3.13 -m venv env
 
-# == Activate the virtual environment
+# == Activate the virtual environment (platform-specific)
 source env/bin/activate # On macOS or Linux
 .\env\Scripts\activate # On windows
 
 # == Install package and dependencies
 pip install .
 
-# == Run the experiments
-# === If you have limited computational resources
-ENTRYPOINT=python make
-
-# === If you have at least ~32GB memory and several CPU cores
-ENTRYPOINT=python make -j 4
+# == Run the model, passing the number of boids as a parameter
+python -m boids 512
 ```
 
-After this completes, the experimental results (metadata + figures) are located in `./results`, and intermediary data in `./data`.
-
+This should open a fullscreen window with the interactive boids application.
 
 ## Development - Getting started
 See the [assignment specification](assignment_spec.pdf).
@@ -107,34 +87,6 @@ pre-commit run --all-files
 uv run <PATH-TO-PYTHON-FILE>
 ```
 
-## Adding new packages with uv
-
-It's simple to add a Python package to the project with uv using `uv add`.
-For instance, to install numpy and scipy, and add them to the dependency graph, run:
-
-```zsh
-uv add numpy scipy
-```
-
-To remove a package dependency, e.g., scipy, run:
-
-```zsh
-uv remove scipy
-```
-
-## Running JupyterLab with uv
-
-uv can also be used to run Jupyter, the same way as we run Python scripts:
-
-```zsh
-# If Jupyter Lab isn't already installed, add it as a dependency
-uv add jupyterlab
-
-# Start a JupyterLab server
-uv run jupyter lab
-```
-
-
 ## Pre-commit hooks
 
 I've included a couple of pre-commit hooks 
@@ -147,3 +99,7 @@ time we commit code to git. Both pre-commit hooks come from the
 These should help to keep code tidy and consistent, with no extra effort on our part. 
 Both of the hooks should run automagically if you've followed the setup instructions for
 [installing pre-commit with uv](#development---getting-started).
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)

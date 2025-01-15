@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-boids = "boids:main"
+boids = "boids:run"
 
 [build-system]
 requires = ["hatchling"]
