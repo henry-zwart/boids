@@ -2,6 +2,10 @@
 
 An interactive 3D simulation of Craig Reynolds' 'Boids' model, written in Python.
 
+
+https://github.com/user-attachments/assets/74c8d25f-7a36-4b6e-9615-411b9d3c26d0
+
+
 [![Boids animation](https://raw.githubusercontent.com/henry-zwart/boids/main/animation_thumbnail.jpg)](https://raw.githubusercontent.com/henry-zwart/boids/main/animation.mp4)
 
 
