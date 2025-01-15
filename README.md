@@ -4,7 +4,7 @@ An interactive 3D simulation of Craig Reynolds' 'Boids' model, written in Python
 
 https://github.com/user-attachments/assets/74c8d25f-7a36-4b6e-9615-411b9d3c26d0
 
-# Usage
+## Usage
 
 The application is driven by a minimal command line interface with usage:
 
@@ -24,7 +24,7 @@ The simplest way to run the application is via [uv](https://github.com/astral-sh
 Alternatively, you can also run the application within a virtual environment. This method 
 requires a pre-existing installation of Python3.13, for instance, obtained via conda or pyenv. 
 
-## With uv (recommended)
+### Running with uv (recommended)
 
 ```zsh
 # == Navigate to this directory
@@ -34,7 +34,7 @@ cd /path/to/boids
 uv run boids 512
 ```
 
-## With a generic Python3.13 venv
+### Running with a generic Python3.13 venv
 
 > **Note:** If your Python3.13 executable is called something other than `python3.13`, replace this accordingly in the following steps.
 
