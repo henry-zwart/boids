@@ -3,10 +3,13 @@
 An interactive 3D simulation of Craig Reynolds' 'Boids' model, written in Python.
 
 
-https://github.com/user-attachments/assets/74c8d25f-7a36-4b6e-9615-411b9d3c26d0
+<div align="center">
+  <video width="320" height="240" controls>
+    <source src="https://github.com/user-attachments/assets/74c8d25f-7a36-4b6e-9615-411b9d3c26d0" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
 
-
-[![Boids animation](https://raw.githubusercontent.com/henry-zwart/boids/main/animation_thumbnail.jpg)](https://raw.githubusercontent.com/henry-zwart/boids/main/animation.mp4)
 
 
 ## Quickstart - Reproducing Results
