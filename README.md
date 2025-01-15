@@ -9,14 +9,14 @@ https://github.com/user-attachments/assets/74c8d25f-7a36-4b6e-9615-411b9d3c26d0
 The Boids model simulates flocking behaviour observed in birds using three local
 rules outlined first by Reynolds: 
 
-+ Avoidance: Boids steer to avoid collisions with other nearby boids
-+ Cohesion: Boids steer in the direction of the center-of-mass of nearby boids
-+ Alignment: Boids attempt to match velocity with nearby boids
++ **Avoidance:** Boids steer to avoid collisions with other nearby boids
++ **Cohesion:** Boids steer in the direction of the center-of-mass of nearby boids
++ **Alignment:** Boids attempt to match velocity with nearby boids
 
 The application includes two further rules:
 
-+ Wall-avoidance: Boids close to a boundary in some dimension accelerate away from the boundary at a constant acceleration
-+ Flee: Boids steer away from nearby predators
++ **Wall-avoidance:** Boids close to a boundary in some dimension accelerate away from the boundary at a constant acceleration 
++ **Flee:** Boids steer away from nearby predators
 
 For a given boid, the acceleration due to each rule (aside from avoidance) is calculated with respect to the 
 boids within the *view radius* of the given boid. The **avoidance** rule uses a separate *avoid radius*,
@@ -25,12 +25,14 @@ which is smaller than the view radius by default.
 At each timestep, each boid's instantaneous acceleration is calculated as a weighted combination 
 of the above rules. The resulting changes in velocity and position are calculated for a boid, $b$, as:
 
-
 $$v_b(t + \Delta t) = v_b(t) + a_b(t)\cdot \Delta t$$
 
 and 
 
 $$x_b(t + \Delta t) = x_b(t) + v_b(t + \Delta t) \cdot \Delta t$$
+
+Where the velocity at each step is bounded such that the speed lies in the 
+(paramererisable) allowable range.
 
 
 ### Predators
