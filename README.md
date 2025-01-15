@@ -23,8 +23,15 @@ boids within the *view radius* of the given boid. The **avoidance** rule uses a 
 which is smaller than the view radius by default.
 
 At each timestep, each boid's instantaneous acceleration is calculated as a weighted combination 
-of the above rules. The resulting changes in velocity and position are calculated as 
-$v(t + \delta t, b) = v(t, b) + a(t, b)\cdot \delta t$ and $x(t + \delta t, b) = x(t, b) + v(t + \delta t, b)\cdot \delta t$.
+of the above rules. The resulting changes in velocity and position are calculated as:
+
+
+$$v(t + \Delta t, b) = v(t, b) + a(t, b)\cdot \Delta t$$
+
+and 
+
+$$x(t + \delta t, b) = x(t, b) + v(t + \delta t, b)\cdot \delta t$$
+
 
 ### Predators
 
