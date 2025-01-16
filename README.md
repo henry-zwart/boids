@@ -1,8 +1,8 @@
-https://github.com/user-attachments/assets/74c8d25f-7a36-4b6e-9615-411b9d3c26d0
-
 # Python Boids
 
 An interactive 3D simulation of [Craig Reynolds' 'Boids'](https://www.red3d.com/cwr/boids/) model, written in Python.
+
+https://github.com/user-attachments/assets/74c8d25f-7a36-4b6e-9615-411b9d3c26d0
 
 ## Usage
 
