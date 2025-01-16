@@ -36,7 +36,8 @@ uv run boids 512
 
 ### Running with a generic Python3.13 venv
 
-> **Note:** If your Python3.13 executable is called something other than `python3.13`, replace this accordingly in the following steps.
+> [!IMPORTANT]
+> If your Python3.13 executable is called something other than `python3.13`, replace this accordingly in the following steps.
 
 ```zsh
 # == Navigate to this directory
