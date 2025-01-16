@@ -1,6 +1,6 @@
 # Python Boids
 
-An interactive 3D simulation of Craig Reynolds' 'Boids' model, written in Python.
+An interactive 3D simulation of [Craig Reynolds' 'Boids'](https://www.red3d.com/cwr/boids/) model, written in Python.
 
 https://github.com/user-attachments/assets/74c8d25f-7a36-4b6e-9615-411b9d3c26d0
 
@@ -35,6 +35,7 @@ Where the velocity at each step is bounded such that the speed lies in the
 (paramererisable) allowable range.
 
 
+
 ### Predators
 
 The application includes a rudimentary predator implementation. Predators are driven 
@@ -45,6 +46,16 @@ view radius, the predators have no further impact on the system (e.g. removal of
 boids). While the predator mechanics are fairly simple, we find the resulting dynamics
 to be interesting. 
 
+### Inspiration
+
+The rule implementations draw inspiration from Craig Reynolds' [extended discussion on steering](https://www.red3d.com/cwr/steer/gdc99/),
+Conrad Parker's [pseudocode](https://vergenet.net/~conrad/boids/pseudocode.html), and 
+Cornell University's [ECE 4760 Boids project page](https://people.ece.cornell.edu/land/courses/ece4760/labs/s2021/Boids/Boids.html#:~:text=Boids%20is%20an%20artificial%20life,very%20simple%20set%20of%20rules.).
+
+This implementation differs particularly from the above-mentioned discussions in that 
+both the velocity and position are updated in accordance with the step-size. This results
+in consistent simulation behaviour irrespective of the framerate (for sufficiently high
+framerates, e.g. greater than $10fps$).
 
 ## Usage
 
