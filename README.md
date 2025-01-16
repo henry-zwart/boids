@@ -88,7 +88,6 @@ Where the velocity at each step is bounded such that the speed lies in the
 (paramererisable) allowable range.
 
 
-
 ### Predators
 
 The application includes a rudimentary predator implementation. Predators are driven 
@@ -101,6 +100,23 @@ Aside from the boids' **flee** rule, which steers them away from predators withi
 view radius, the predators have no further impact on the system (e.g. removal of collided 
 boids). While the predator mechanics are fairly simple, we find the resulting dynamics
 to be interesting. 
+
+### Future performance improvements
+
+The implementation uses a KDTree to avoid the performance bottlenecks associated with 
+naive nearest-neighbor search; however, we find that in practice the KDTree building
+and lookup still contributes most to the runtime in each model iteration.
+
+In practice, we find that the acceleration norm in a given iteration can vary 
+substantially between boids. This finding presents an opportunity to improve simulation
+performance with (potentially) minimal impact on results.
+
+For instance, boids with sufficiently small acceleration and speed have limited impact on the 
+system. If we assume that such boids will continue to have low acceleration in the near
+future (this may be a good model of *reaction time*), then we can avoid rebuilding the whole 
+KDTree on each iteration. Instead, we may rebuild the tree only for those boids with high 
+acceleration and speed, for whom the position and velocity is expected to change substantially
+over a short number of iterations, rebuilding the full tree only every $X > 1$ iterations. 
 
 ### Inspiration
 
