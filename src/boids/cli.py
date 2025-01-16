@@ -8,6 +8,7 @@ DIMS = [1024, 1024, 1024]
 
 
 def set_default_fps(n_boids: int) -> int:
+    """Configure default framerate heuristically to ensure stable animation."""
     if n_boids <= 512:
         return 30
     elif n_boids <= 1024:
@@ -19,6 +20,7 @@ def set_default_fps(n_boids: int) -> int:
 
 
 def set_default_view_radius(n_boids: int) -> int:
+    """Configure default view radius to ensure stable animation."""
     if n_boids <= 1500:
         return 150
     else:
@@ -26,7 +28,7 @@ def set_default_view_radius(n_boids: int) -> int:
 
 
 def run():
-    # Define minimal cli
+    """A minimal CLI to drive the boids application."""
     parser = argparse.ArgumentParser("Interactive Boid simulation.")
     parser.add_argument("n_boids", type=int, help="Number of boids to simulate.")
     parser.add_argument(

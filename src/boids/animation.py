@@ -19,6 +19,10 @@ class InteractiveAnimation:
         self.setup_widgets()
 
     def run(self):
+        """Run application.
+
+        The application repeats with the seconds per iteration, cycle_seconds,
+        calculated such that camera rotation performs a full cycle each iteration."""
         cycle_seconds = (360 / self.ROTATION_SPEED) / self.fps
         self.total_frames = int(self.fps * cycle_seconds)
         self.animation = FuncAnimation(
@@ -32,6 +36,14 @@ class InteractiveAnimation:
         plt.show()
 
     def update_plot(self, _: int):
+        """Update the animation scene.
+
+        First updates the underlying flock model velocities and positions, and then
+        edits the agent positions accordingly.
+
+        If camera rotation is enabled (in the UI), also orbits the camera around the
+        scene, to aid in perception of depth.
+        """
         self.flock.update(self.step_size)
         self.boids.set_data(self.flock.position[:, 0], self.flock.position[:, 1])
         self.preds.set_data(
@@ -49,9 +61,8 @@ class InteractiveAnimation:
 
         return self.boids, self.preds, self.ax_plot
 
-    def setup_plot(
-        self,
-    ):
+    def setup_plot(self):
+        """Creates animation plot, and axes to display boids & predators."""
         fig = plt.figure(layout="constrained")
 
         # Create the axis for the plot
@@ -107,6 +118,7 @@ class InteractiveAnimation:
         self.ax_plot = ax_plot
 
     def setup_widgets(self):
+        """Configure the application's interactive elements using Matplotlib widgets."""
         # Rule weights
         self.fig.text(0.75, 0.8, "Rule weights", ha="center", va="center", fontsize=12)
         self.ax_separation_slider = self.fig.add_axes((0.65, 0.75, 0.2, 0.03))

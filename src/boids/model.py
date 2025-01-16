@@ -46,6 +46,7 @@ class Flock:
         self.init_agents(n_boids, n_predators, initial_position, initial_velocity)
 
     def init_environment(self, bounds: list[int] | None, barrier_pct: float):
+        """Compute the bounds and margins for boid containment."""
         if bounds is not None:
             self.ndim = len(bounds)
             self.bounds = np.array([0 for _ in range(self.ndim)] + bounds)
@@ -57,12 +58,6 @@ class Flock:
         self.barrier_bounds[: self.ndim] += self.bounds[self.ndim :] * self.barrier_pct
         self.barrier_bounds[self.ndim :] *= 1 - self.barrier_pct
 
-        # Normal vectors describing the walls
-        self.walls = np.zeros((2 * self.ndim, self.ndim), dtype=np.float64)
-        for d in range(self.ndim):
-            self.walls[d, d] = 1
-            self.walls[self.ndim + d, d] = -1
-
     def init_agents(
         self,
         n_boids: int,
@@ -70,6 +65,7 @@ class Flock:
         boid_initial_position: np.ndarray | None,
         boid_initial_velocity: np.ndarray | None,
     ):
+        """Initialise boid and predator position, velocity, and acceleration."""
         # boid position + velocity
         self.position = self.init_positions(n_boids, boid_initial_position)
         self.velocity = self.init_velocity(
@@ -109,6 +105,11 @@ class Flock:
         min_speed: float,
         max_speed: float,
     ) -> np.ndarray:
+        """Initialise velocity for boids or predators.
+
+        Initial velocity is calculated as the combination of an initial speed and
+        initial heading. The initial speed is bounded to be within the allowable range.
+        """
         if initial_velocity is not None:
             velocity = bound_norm(initial_velocity, min_speed, max_speed)
         else:
@@ -119,6 +120,13 @@ class Flock:
         return velocity
 
     def update(self, step_size: float = 1):
+        """Update the velocity and position of all agents, over a given timestep.
+
+        New velocity is calculated as: old_velocity + acceleration * step_size
+        New position is calculated as: old_position + new_velocity * step_size
+
+        Where the velocity is scaled such that the speed falls within the allowable range.
+        """
         # Update boids
         self.velocity = bound_norm(
             self.velocity + self.acceleration * step_size,
@@ -138,6 +146,25 @@ class Flock:
         self.compute_acceleration()
 
     def compute_acceleration(self):
+        """Compute instantaneous acceleration for all agents (boids and predators).
+
+        Boid acceleration is a weighted combination of:
+        - Avoidance: away from boids within self.avoid_radius
+        - Cohesion: toward the center of mass of boids in self.view_radius
+        - Alignment: match velocity (speed and heading) of boids in self.view_radius
+        - Wall-avoidance: away from walls when margin is within self.avoid_radius
+        - Flee: away from predators within self.view_radius
+
+        Predator acceleration is given by the cohesion rule, calculated across all
+        boids (effective infinite view_radius).
+
+        A KDTree is used to avoid the poor scaling associated with the naive calculation
+        of nearby birds. This KDTree is rebuilt each time the function is called.
+
+        While its use provides a significant performance increase for large numbers of boids,
+        the KDTree building and lookup still consumes most of the method runtime. A
+        future direction for performance improvement is described in the README.
+        """
         self.acceleration[:, :] = 0
         self.predator_acceleration[:, :] = 0
 
@@ -194,11 +221,25 @@ class Flock:
     def calculate_avoidance(
         self, position: np.ndarray, position_close: np.ndarray
     ) -> np.ndarray:
+        """Calculate avoidance force.
+
+        This is calculated by summing vectors directed away from nearby boids.
+        """
         return (position - position_close).sum(axis=0)
 
     def calculate_alignment(
         self, velocity: np.ndarray, velocity_close: np.ndarray
     ) -> np.ndarray:
+        """Calculate alignment force.
+
+        Determines the average velocity of nearby boids, and takes the alignment
+        force to be the vector in the direction of this average velocity, from the
+        current velocity.
+
+        Note that the velocity_close parameter includes the velocity of the
+        target boid. The calculation thus subtracts this velocity inside the average
+        velocity calculation.
+        """
         return (
             (velocity_close.sum(axis=0) - velocity)
             / max(1, (velocity_close.shape[0] - 1))
@@ -207,12 +248,29 @@ class Flock:
     def calculate_cohesion(
         self, position: np.ndarray, position_close: np.ndarray
     ) -> np.ndarray:
+        """Calculate cohesion force.
+
+        Determines the center-of-mass of nearby boids, and takes the cohesion
+        force to be the vector in the direction of this center-of-mass, from the
+        current position.
+
+        Note that the position_close parameter includes the position of the
+        target boid. The calculation thus subtracts this position inside the average
+        center-of-mass calculation.
+        """
         return (
             (position_close.sum(axis=0) - position)
             / max(1, (position_close.shape[0] - 1))
         ) - position
 
     def avoid_walls(self):
+        """Calculate the wall-avoidance force across all boids in the simulation.
+
+        A boid is accelerated away from a wall if the margin on that wall lies within
+        the boid avoidance radius. The default margin extends 5% internal to the wall
+        bounds. The acceleration away from any given wall is given by the product
+        of the maximum boid speed and the wall avoidance weight.
+        """
         nudge = np.zeros_like(self.acceleration)
         for dim in range(self.ndim):
             exit_left = (
@@ -228,6 +286,7 @@ class Flock:
         return nudge * self.max_speed * self.weights.containment
 
     def add_predator(self):
+        """Adds a predator to the system with random initial position and velocity."""
         position = self.init_positions(1, None)
         velocity = self.init_velocity(
             1, None, self.predator_min_speed, self.predator_max_speed
@@ -240,6 +299,10 @@ class Flock:
         )
 
     def remove_oldest_predator(self):
+        """Removes the predator in index 0 from the system.
+
+        If no predators exist, this method has no effect.
+        """
         self.predator_position = self.predator_position[1:]
         self.predator_velocity = self.predator_velocity[1:]
         self.predator_acceleration = self.predator_acceleration[1:]
@@ -249,6 +312,7 @@ class Flock:
 
 
 def bound_norm(vec: np.ndarray, min_norm: float, max_norm: float) -> np.ndarray:
+    """Scales a vector such that its norm is within an allowable range."""
     norm = np.linalg.norm(vec, axis=1)
     too_high = norm > max_norm
     too_low = norm < min_norm
