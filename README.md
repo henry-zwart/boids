@@ -39,7 +39,10 @@ Where the velocity at each step is bounded such that the speed lies in the
 ### Predators
 
 The application includes a rudimentary predator implementation. Predators are driven 
-by a single rule which steers them toward the center of mass of the boid population. 
+by a single rule which steers them toward the center of mass of the boid population. The
+strength of this rule is determined by the **seek** parameter (tunable within the application).
+Higher values permit higher acceleration, which affects both the speed of predators, and 
+the rate at which they can 'turn'. 
 
 Aside from the boids' **flee** rule, which steers them away from predators within their
 view radius, the predators have no further impact on the system (e.g. removal of collided 
